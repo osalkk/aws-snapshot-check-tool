@@ -38,7 +38,7 @@ def find_snapshots():
             for inst in r['Instances']:
                 inst_id=inst['InstanceId']
                 tags=inst['Tags']
-		#Check the Name tag
+                #Check the Name tag
                 for tag in tags:
                     if 'Name' in tag['Key']:
                         ins_tag=(tag['Value'])
@@ -71,7 +71,7 @@ def find_snapshots():
                             b = dateutil.parser.parse(datetime.date.strftime(snapshot_date,'%Y-%m-%d'))
                             diff = relativedelta(a, b)
                             snapshot_creation=diff.years*12+diff.months*30+diff.days
-                            if snapshot_creation<3:      #Check the snapshots older than 3 days
+                            if snapshot_creation<0:      #Check the snapshots older than 3 days
                                 recent_snapshots.append(volume)
                                 recent_snapshots=list(set(recent_snapshots))
                             else:
@@ -93,9 +93,8 @@ def find_snapshots():
                     print("Volumes without snapshots: ",volumes_without_snapshots)
                 print("\n")
                 #ask for creating snapshot
-		if len(volumes_without_snapshots)>0 or len(removed_recent_snapshots)>0:
+                if len(volumes_without_snapshots)>0 or len(removed_recent_snapshots)>0:
                     ask_for_snapshot = input("Do you want to create snapshot of the volumes?: Y/n ")
-			
                 if ask_for_snapshot in ['Y','y']:
                     for volume in removed_recent_snapshots:
                         print("Creating snapshot for volume: ",volume)
